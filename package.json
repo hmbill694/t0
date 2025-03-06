@@ -1,0 +1,19 @@
+{
+  "name": "t0",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@langchain/community": "^0.3.33",
+    "@langchain/core": "^0.3.42",
+    "@langchain/google-genai": "^0.1.10",
+    "@langchain/google-vertexai": "^0.2.0",
+    "@langchain/langgraph": "^0.2.51",
+    "@langchain/openai": "^0.4.4"
+  }
+}
