@@ -1,7 +1,7 @@
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { END, START, StateGraph } from "@langchain/langgraph";
 import { MemorySaver } from "@langchain/langgraph";
-import initGraphState from "./lib/graph-state/init-graph-state";
+import initGraphState from "./lib/graph-state/init-page-creator-graph";
 import { responder } from "./lib/steps/story-teller";
 import { writeToFile } from "./lib/steps/file-writter";
 
@@ -27,4 +27,4 @@ const workflow = new StateGraph(initGraphState())
 
 const app = workflow.compile()
 
-console.log(await app.invoke({ messages: [], topic: "Large cats" }))
+console.log(await app.invoke({ messages: [], topic: "cats" }))

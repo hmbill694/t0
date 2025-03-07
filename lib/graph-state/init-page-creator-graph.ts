@@ -14,5 +14,4 @@ export default function initGraphState() {
   });
 }
 
-export type ApplicationGraph = ReturnType<typeof initGraphState>
-export type ApplicationGraphState = ApplicationGraph['State']
+export type PageCreatorGraph = { messages: BaseMessage[], topic: String }
