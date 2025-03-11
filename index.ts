@@ -8,6 +8,8 @@ import { Elysia, redirect, t } from 'elysia'
 import { staticPlugin } from '@elysiajs/static'
 import { html, Html } from '@elysiajs/html'
 import Index from "./lib/views/index"
+import { getFileNames } from "./lib/services/generated-documents";
+import GeneratedDocuments from "./lib/views/generated-documents";
 
 
 
@@ -29,17 +31,18 @@ const workflow = new StateGraph(initGraphState())
 
 const generationGraph = workflow.compile()
 
-// console.log(await generationGraph.invoke({ userInput: "The application shell for an application named T0. The Appshell should have a nav that is sticky and be styled with flexbox. There should be a footer and the content area should fill the entirity of the remaining space. The page should be at least the 100vh. There should be form in the content area. The form should post to /api/v1/generate-document. The form has one textarea named chat." }))
-
-
 const app = new Elysia()
   .use(staticPlugin())
   .use(html())
 	.get('/', Index)
+  .get('/generated-docs', async () => {
+    const files = await getFileNames("./public/out")
+    return GeneratedDocuments({ files })
+  })
   .post('/api/v1/generate-document', async ({ body }) => {
     console.log("Generating your file with the below description", body.chat)
     await generationGraph.invoke({ userInput: body.chat })
-    return redirect('/')
+    return redirect('/generated-docs')
   }, {
     body: t.Object({
       chat: t.String()
