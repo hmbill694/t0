@@ -10,7 +10,7 @@ export const writeToFile: GraphStepFunction<PageCreatorGraph> = async (state) =>
 
     const lastMessage = state.messages.at(-1)?.content.toString() ?? "No content to write to file."
 
-    const path = `out/page-${new Date().toISOString()}.html`;
+    const path = `public/out/page-${new Date().toISOString()}.html`;
 
     await Bun.write(path, lastMessage)
 
