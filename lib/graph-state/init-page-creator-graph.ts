@@ -10,8 +10,9 @@ export default function initGraphState() {
       // Default function: Initialize the channel with an empty array
       default: () => [],
     }),
-    topic: Annotation<String>,
+    userInput: Annotation<String>,
+    htmlIsValid: Annotation<Boolean>,
   });
 }
 
-export type PageCreatorGraph = { messages: BaseMessage[], topic: String }
+export type PageCreatorGraph = { messages: BaseMessage[], htmlIsValid: Boolean, userInput: String }
