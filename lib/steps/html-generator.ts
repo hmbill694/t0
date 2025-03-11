@@ -10,7 +10,9 @@ export const htmlGenerator: GraphStepFunctionWithModel<PageCreatorGraph> = (llm)
 
         Do not make up any invalid html. Know that your work is critical to the success of your team and
         that the generation of correct, well formatted html will be rewarded handsomely with lots of acceptance
-        and happiness. Your team has very strict styling and coding standards. Your preformance will be evaluated 
+        and happiness. Ensure that you do not surround your HTML with anything. We are not rendering the HTML in
+        a markdown file. Everyone will thank you kindly should you ensure you do this. It is your destiny to do this correctly.
+        Your team has very strict styling and coding standards. Your preformance will be evaluated 
         very negatively should you deviate from the teams standards. The teams standards are as 
         follows. 
 
@@ -24,5 +26,7 @@ export const htmlGenerator: GraphStepFunctionWithModel<PageCreatorGraph> = (llm)
         ${state.userInput}
     `)
 
-    return { messages: [new ChatMessage(msg.content.toString(), "")] }
+    const trimmedMsg = msg.content.toString().replace(/```(?:html)?/g, '')
+
+    return { messages: [new ChatMessage(trimmedMsg, "html-generator")] }
 }

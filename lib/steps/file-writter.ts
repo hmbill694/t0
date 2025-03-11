@@ -47,9 +47,9 @@ export const writeToFile: GraphStepFunction<PageCreatorGraph> = async (state) =>
 
     const html = state.messages.at(-1)?.content.toString() ?? "No content to write to file."
 
-    const fileName = generateFileName()
+    const fileName = `${generateFileName()}.html`
 
-    const path = `public/out/${fileName}.html`;
+    const path = `public/out/${fileName}`;
 
     await Bun.write(path, html)
 
