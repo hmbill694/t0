@@ -12,7 +12,8 @@ export default function initGraphState() {
     }),
     userInput: Annotation<String>,
     htmlIsValid: Annotation<Boolean>,
+    outputFileName: Annotation<String>
   });
 }
 
-export type PageCreatorGraph = { messages: BaseMessage[], htmlIsValid: Boolean, userInput: String }
+export type PageCreatorGraph = { messages: BaseMessage[], htmlIsValid: Boolean, userInput: String, outputFileName: String }
