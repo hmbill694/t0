@@ -41,8 +41,8 @@ const app = new Elysia()
   })
   .post('/api/v1/generate-document', async ({ body }) => {
     console.log("Generating your file with the below description", body.chat)
-    await generationGraph.invoke({ userInput: body.chat })
-    return redirect('/generated-docs')
+    const fileName = await generationGraph.invoke({ userInput: body.chat }).then(ele => ele.outputFileName)
+    return redirect(`/public/out/${fileName}`)
   }, {
     body: t.Object({
       chat: t.String()
