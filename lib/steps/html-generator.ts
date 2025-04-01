@@ -1,4 +1,4 @@
-import type { PageCreatorGraph } from "../graph-state/init-page-creator-graph";
+import type { PageCreatorGraph } from "../agent-graphs/generator-graph";
 import type { GraphStepFunctionWithModel } from "../types";
 import { ChatMessage } from "@langchain/core/messages";
 
@@ -28,5 +28,5 @@ export const htmlGenerator: GraphStepFunctionWithModel<PageCreatorGraph> = (llm)
 
     const trimmedMsg = msg.content.toString().replace(/```(?:html)?/g, '')
 
-    return { messages: [new ChatMessage(trimmedMsg, "html-generator")] }
+    return { messages: [new ChatMessage(trimmedMsg, "html-generator")], outputHtml: trimmedMsg  }
 }

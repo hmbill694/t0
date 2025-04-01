@@ -88,4 +88,12 @@ export class Result<T> {
   isError(): boolean {
     return !this.result.success
   }
+
+  ifNull(errorMsg: string): Result<NonNullable<T>> {
+    if (!this.result.success) return Result.Err(this.result.error)
+
+    if (this.result.data == null) return Result.Err(errorMsg)
+
+    return this as Result<NonNullable<T>>
+  }
 }

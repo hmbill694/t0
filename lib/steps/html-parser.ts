@@ -1,10 +1,10 @@
 import { ChatMessage } from "@langchain/core/messages";
 import type { GraphStepFunction } from "../types";
-import type { PageCreatorGraph } from "../graph-state/init-page-creator-graph";
 import { Result } from "../utils/result";
+import type { PageCreatorGraph } from "../agent-graphs/generator-graph";
 
 export const htmlParserNode: GraphStepFunction<PageCreatorGraph> = async (state) => {
-    const html = state.messages.at(-1)?.content.toString()
+    const html = state.outputHtml
 
     if (!html) {
         throw new Error("Html parser node called when there is no messages to parse")
@@ -12,7 +12,7 @@ export const htmlParserNode: GraphStepFunction<PageCreatorGraph> = async (state)
 
     const htmlRewriter = new HTMLRewriter()
 
-    const parsed = Result.fromFallible(() => htmlRewriter.transform(html))
+    const parsed = Result.fromFallible(() => htmlRewriter.transform(html.toString()))
 
 
     if (parsed.isError()) {
