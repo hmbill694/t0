@@ -1,15 +1,12 @@
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
-import { END, START, StateGraph } from "@langchain/langgraph";
-import initGraphState from "./lib/graph-state/init-page-creator-graph";
-import { htmlGenerator } from "./lib/steps/html-generator";
-import { writeToFile } from "./lib/steps/file-writter";
-import { htmlParserNode } from "./lib/steps/html-parser";
 import { Elysia, redirect, t } from 'elysia'
 import { staticPlugin } from '@elysiajs/static'
 import { html, Html } from '@elysiajs/html'
 import Index from "./lib/views/index"
-import { getFileNames } from "./lib/services/generated-documents";
 import GeneratedDocuments from "./lib/views/generated-documents";
+import PageGeneratorAgentGraph from "./lib/agent-graphs/generator-graph";
+import { getGeneratedDoc, getGeneratedPages, saveDocument } from "./lib/services/generated-documents";
+import GeneratedDocument from "./lib/views/generated-document";
 
 
 
@@ -20,29 +17,28 @@ const agentModel = new ChatGoogleGenerativeAI({
   apiKey: process.env.GOOGLE_API_KEY
 });
 
-const workflow = new StateGraph(initGraphState())
-    .addNode("query-node", htmlGenerator(agentModel))
-    .addNode("html-validator", htmlParserNode)
-    .addNode("file-writter", writeToFile)
-    .addEdge(START, "query-node")
-    .addEdge("query-node", "html-validator")
-    .addEdge("html-validator", "file-writter")
-    .addEdge("file-writter", END)
-
-const generationGraph = workflow.compile()
+const htmlGeneratorGraph = PageGeneratorAgentGraph(agentModel)
 
 const app = new Elysia()
   .use(staticPlugin())
   .use(html())
 	.get('/', Index)
   .get('/generated-docs', async () => {
-    const files = await getFileNames("./public/out")
+    const files = await getGeneratedPages()
     return GeneratedDocuments({ files })
   })
+  .get('/generated-doc/:projectId/:docId', async ({ params }) => {
+    const doc = await getGeneratedDoc(params)
+
+    return GeneratedDocument({ html: doc.content })
+  }, { params: t.Object({ projectId: t.Number(), docId: t.Number() }) })
   .post('/api/v1/generate-document', async ({ body }) => {
     console.log("Generating your file with the below description", body.chat)
-    const fileName = await generationGraph.invoke({ userInput: body.chat }).then(ele => ele.outputFileName)
-    return redirect(`/public/out/${fileName}`)
+    const state = await htmlGeneratorGraph.invoke({ userInput: body.chat })
+
+    const doc = await saveDocument({ content: state.outputHtml, name: state.outputFileName, projectId: 1 })
+
+    return redirect(`/generated-doc/${1}/${doc.id}`)
   }, {
     body: t.Object({
       chat: t.String()
