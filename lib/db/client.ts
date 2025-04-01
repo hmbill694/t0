@@ -6,4 +6,5 @@ const turso = createClient({
   authToken: process.env.TURSO_AUTH_TOKEN,
 });
 
+export type DB = typeof db
 export const db = drizzle(turso);
