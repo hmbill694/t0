@@ -1,8 +1,9 @@
 import { Html } from "@elysiajs/html";
 import MainLayout from "../layouts/main-layout";
+import type { SelectPage } from "../db/schema";
 
 export type GeneratedDocumentsProps = {
-  files: string[];
+  files: SelectPage[];
 };
 
 export default function GeneratedDocuments(props: GeneratedDocumentsProps) {
@@ -12,7 +13,7 @@ export default function GeneratedDocuments(props: GeneratedDocumentsProps) {
       <ul>
         {props.files.map((ele) => (
           <li>
-            <a href={`/public/out/${ele}`}>{ele}</a>
+            <a href={`/generated-doc/${ele.projectId}/${ele.id}`}>{ele.name}</a>
           </li>
         ))}
       </ul>
