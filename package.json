@@ -18,7 +18,7 @@
   "dependencies": {
     "@elysiajs/html": "^1.2.0",
     "@elysiajs/static": "^1.2.0",
-    "@langchain/community": "^0.3.33",
+    "@langchain/community": "^1.1.14",
     "@langchain/core": "^0.3.42",
     "@langchain/google-genai": "^0.1.10",
     "@langchain/google-vertexai": "^0.2.0",
